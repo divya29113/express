@@ -30,9 +30,9 @@ app.get("/home",(req,res)=>{
 
 app.get("/expense",async(req,res)=>{
     try{
-        const userData= await db.collection("expensetracker").find().toArray();
-        console.log(userData);
-        res.status(200).json(userData);
+        const expenseData= await db.collection("expensetracker").find().toArray();
+        console.log(expenseData);
+        res.status(200).json(expenseData);
     }
     catch(err){
         console.log(err);
@@ -41,6 +41,21 @@ app.get("/expense",async(req,res)=>{
 
 
 })
+
+app.post("/addexpense",async(req,res)=>{
+    try{
+        const requestData=req.body;
+        let storeData=await db.collection("expensetracker").insertOne(requestData);
+        console.log(storeData);
+        res.status(200).json({message:"Expense added successfully"})
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error:"Failed to add expense"})
+    }
+
+})
+
+
 
 
 app.listen(3000,()=>{
