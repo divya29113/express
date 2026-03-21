@@ -54,7 +54,36 @@ app.post("/addexpense",async(req,res)=>{
     }
 
 })
+app.put("/editexpense/:targetid", async (req, res) => {
+  try {
+    const targetId = parseInt(req.params.targetid);
+    const { expenseTitle, expenseAmount } = req.body;
+    let editData = await db
+      .collection("expensetracker")
+      .updateOne(
+        { id: targetId },
+        { $set: { expenseTitle: expenseTitle, expenseAmount: expenseAmount } },
+      );
+    console.log(editData);
+    res.status(200).json({ message: "Expense edited successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Failed to edit expense" });
+  }
+});
 
+app.delete("/deleteexpense/:targetid", async (req, res) => {
+  try {
+    const targetId = parseInt(req.params.targetid);
+    let deleteData = await db
+      .collection("expensetracker")
+      .deleteOne({ id: targetId });
+    res.status(200).json({ message: "Expense deleted successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Failed to delete expense" });
+  }
+});
 
 
 
